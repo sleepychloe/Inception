@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   mariadb:
@@ -43,10 +43,12 @@ services:
 
 networks:
   intra:
+    name: intra
     driver: bridge
 
 volumes:
   mariadb_data:
+    name: mariadb_data
     driver: local
     driver_opts:
       type: none
@@ -54,6 +56,7 @@ volumes:
       o: bind
 
   wordpress_data:
+    name: wordpress_data
     driver: local
     driver_opts:
       type: none

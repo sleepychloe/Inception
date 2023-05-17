@@ -1,34 +1,55 @@
+RESET	:= $(shell tput -Txterm sgr0)
+YELLOW	:= $(shell tput -Txterm setaf 3)
+BLUE	:= $(shell tput -Txterm setaf 6)
+
 COMPOSE_FILE = ./srcs/docker-compose.yml
 
-all: build
+all: up
 
-build:
-	@echo "Building.."
+up:
+	@echo "$(BLUE)Creating and starting containers..$(RESET)"
 	@sudo mkdir -p /home/yhwang/data/wordpress
 	@sudo mkdir -p /home/yhwang/data/mysql
 	@docker-compose -f $(COMPOSE_FILE) up --build -d
+	@echo "$(YELLOW)Containers succesfully created and started$(RESET)"
 
 list:
-	@echo "LIST OF CONTAINERS:"
-	docker ps -a
-	@echo "LJIST OF VOLUMES:"
-	docker volume ls
+	@echo "$(BLUE)LIST OF CONTAINERS:$(RESET)"
+	@docker ps -a
+	@echo ""
 
-down:
-	@echo "Stopping.."
+	@echo "$(BLUE)LIST OF VOLUMES:$(RESET)"
+	@docker volume ls
+	@echo ""
+
+	@echo "$(BLUE)LIST OF IMAGES:$(RESET)"
+	@docker image ls -a
+	@echo ""
+
+	@echo "$(BLUE)LIST OF NETWORKS:$(RESET)"
+	@docker network ls
+
+stop:
+	@echo "$(BLUE)Stopping container..$(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) stop
+	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
+
+fclean:
+	@echo "$(BLUE)Removing everything..$(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) stop
+	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
+
 	@docker-compose -f $(COMPOSE_FILE) down
+	@echo "$(YELLOW)Containers and networks successfully removed$(RESET)"
 
-clean:
-	@echo "Removing everything.."
-	@docker-compose -f $(COMPOSE_FILE) down
-	@docker system prune --all --force --volumes
+	@docker image rm -f `docker images -qa`
+	@echo "$(YELLOW)Images succesfully removed$(RESET)"
 
-	@-docker volume rm `docker volume ls -q`
+	@docker volume rm `docker volume ls -q`
+	@echo "$(YELLOW)Volumes sussessfully removed$(RESET)"
 
-	@docker network prune --force
-	
 	@sudo rm -rf /home/yhwang/data/wordpress
 	@sudo rm -rf /home/yhwang/data/mysql
-	@echo "DONE!"
+	@echo "$(BLUE)Everything is successfully removed!$(RESET)"
 
-.PHONY: all build list down clean
+.PHONY: all up list stop fclean

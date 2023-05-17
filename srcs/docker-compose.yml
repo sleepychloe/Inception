@@ -19,6 +19,8 @@ services:
     restart: always
     depends_on:
       - mariadb
+    expose:
+      - "9000"
     volumes:
       - wordpress_data:/var/www/html/wordpress
     networks:

@@ -1,12 +1,19 @@
-RESET	:= $(shell tput -Txterm sgr0)
-YELLOW	:= $(shell tput -Txterm setaf 3)
-BLUE	:= $(shell tput -Txterm setaf 6)
+RESET		:= $(shell tput -Txterm sgr0)
+YELLOW		:= $(shell tput -Txterm setaf 3)
+BLUE		:= $(shell tput -Txterm setaf 6)
 
-COMPOSE_FILE = ./srcs/docker-compose.yml
+ETC_HOSTS	:= /etc/hosts
+CONTENTS	:= $(shell cat ${ETC_HOSTS})
+
+COMPOSE_FILE	= ./srcs/docker-compose.yml
 
 all: up
 
 up:
+ifneq ($(findstring yhwang.42.fr,$(CONTENTS)),yhwang.42.fr)
+	@echo "127.0.0.1	yhwang.42.fr" | sudo tee -a /etc/hosts
+endif
+
 	@echo "$(BLUE)Creating and starting containers..$(RESET)"
 	@sudo mkdir -p /home/yhwang/data/wordpress
 	@sudo mkdir -p /home/yhwang/data/mysql

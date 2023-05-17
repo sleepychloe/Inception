@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: debian:buster
+    restart: always
+    expose:
+      - "3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - intra
+    tty: true
+
+  wordpress:
+    container_name: wordpress
+    image: debian:buster
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    networks:
+      - intra
+    tty: true
+
+  nginx:
+    container_name: nginx
+    image: debian:buster
+    restart: always
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    networks:
+      - intra
+    tty: true
+
+networks:
+  intra:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/yhwang/data/mysql
+      o: bind
+
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/yhwang/data/wordpress
+      o: bind

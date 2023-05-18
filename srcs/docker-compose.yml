@@ -3,7 +3,8 @@ version: '3.5'
 services:
   mariadb:
     container_name: mariadb
-    image: debian:buster
+    build: ./requirements/mariadb
+    env_file: .env
     restart: always
     expose:
       - "3306"
@@ -15,7 +16,8 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: debian:buster
+    #build: ./requirements/wordpress
+    image: wordpress
     restart: always
     depends_on:
       - mariadb
@@ -29,7 +31,8 @@ services:
 
   nginx:
     container_name: nginx
-    image: debian:buster
+    #build: ./requirements/nginx
+    image: nginx
     restart: always
     ports:
       - "443:443"

@@ -14,6 +14,7 @@ ifneq ($(findstring yhwang.42.fr, $(shell cat /etc/hosts)), yhwang.42.fr)
 endif
 
 	@echo "$(BLUE)Creating and starting containers..$(RESET)"
+
 ifneq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
 	@sudo mkdir -p /home/yhwang/data/wordpress
 endif
@@ -35,7 +36,7 @@ list:
 	@echo ""
 
 	@echo "$(BLUE)LIST OF IMAGES:$(RESET)"
-	@docker image ls -a
+	@docker image ls
 	@echo ""
 
 	@echo "$(BLUE)LIST OF NETWORKS:$(RESET)"
@@ -72,30 +73,34 @@ fclean:
 	@docker-compose -f $(COMPOSE_FILE) stop
 	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
 
-ifeq ($(shell echo $(docker ps -a | wc -l)-1 | bc -l) && $(shell docker network ls | grep intra | wc -l), 1)
-	@docker-compose -f $(COMPOSE_FILE) down
-	@echo "$(YELLOW)Containers and networks successfully removed$(RESET)"
+ifneq ($(shell echo $(shell echo $(shell docker ps -a | wc -l)-1 | bc -l)\
+	+$(shell docker network ls | grep intra | wc -l)\
+	+$(shell echo $(shell docker volume ls | wc -l)-1 | bc -l) | bc -l), 0)
+	@docker-compose -f $(COMPOSE_FILE) down -v
+	@echo "$(YELLOW)Containers successfully removed$(RESET)"
+	@echo "$(YELLOW)Networks successfully removed$(RESET)"
+	@echo "$(YELLOW)Volumes successfully removed$(RESET)"
 else
 	@echo "$(YELLOW)There is no container to remove$(RESET)"
 	@echo "$(YELLOW)There is no network to remove$(RESET)"
+	@echo "$(YELLOW)There is no volume to remove$(RESET)"
 endif
 
-ifneq ($(shell docker images | wc -l), 1)
-	@docker image rm -f `docker images -qa`
+ifneq ($(shell docker image ls | wc -l), 1)
+	@docker rmi $(shell docker images -q) -f
 	@echo "$(YELLOW)Images succesfully removed$(RESET)"
 else
 	@echo "$(YELLOW)There is no image to remove$(RESET)"
 endif
 
-ifneq ($(shell docker volume ls | wc -l), 1)
-	@docker volume rm `docker volume ls -q`
-	@echo "$(YELLOW)Volumes sussessfully removed$(RESET)"
-else
-	@echo "$(YELLOW)There is no volume to remove$(RESET)"
+ifeq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
+	@sudo rm -rf /home/yhwang/data/wordpress
 endif
 
-	@sudo rm -rf /home/yhwang/data/wordpress
+ifeq ($(shell ls /home/yhwang/data/ | grep mysql | wc -l ), 1)
 	@sudo rm -rf /home/yhwang/data/mysql
+endif
+
 	@echo "$(BLUE)Everything is successfully removed!$(RESET)"
 
 .PHONY: all up list stop fclean

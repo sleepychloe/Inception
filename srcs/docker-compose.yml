@@ -16,8 +16,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    #build: ./requirements/wordpress
-    image: wordpress
+    build: ./requirements/wordpress
     restart: always
     depends_on:
       - mariadb

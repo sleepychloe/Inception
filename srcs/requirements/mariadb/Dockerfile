@@ -1,6 +1,18 @@
-FROM	debian:buster
+FROM debian:buster
 
-# RUN	apt-get update -y && \
-#		apt-get upgrade -y && \
-# 		apt-get -y install mariadb-server
+RUN apt-get -y update && \
+	apt-get -y upgrade && \
+	apt-get -y install dumb-init && \
+	chmod +x /usr/bin/dumb-init
 
+RUN apt-get -y install mariadb-server
+
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
+COPY ./tools/script.sh /
+
+RUN chmod +x /script.sh
+
+#handling dumb-init
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+CMD ["/script.sh"]

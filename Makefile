@@ -14,8 +14,14 @@ ifneq ($(findstring yhwang.42.fr, $(shell cat /etc/hosts)), yhwang.42.fr)
 endif
 
 	@echo "$(BLUE)Creating and starting containers..$(RESET)"
+ifneq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
 	@sudo mkdir -p /home/yhwang/data/wordpress
+endif
+
+ifneq ($(shell ls /home/yhwang/data/ | grep mysql | wc -l ), 1)
 	@sudo mkdir -p /home/yhwang/data/mysql
+endif
+
 	@docker-compose -f $(COMPOSE_FILE) up --build -d
 	@echo "$(YELLOW)Containers succesfully created and started$(RESET)"
 
@@ -52,13 +58,27 @@ else
 	@echo "$(YELLOW)There is no container to stop$(RESET)"
 endif
 
+restart:
+ifneq ($(shell docker ps -a | wc -l), 1)
+	@echo "$(BLUE)Restarting container..$(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) restart
+	@echo "$(YELLOW)Containers succesfully restarted$(RESET)"
+else
+	@echo "$(YELLOW)There is no container to restart$(RESET)"
+endif
+
 fclean:
 	@echo "$(BLUE)Removing everything..$(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) stop
 	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
 
+ifeq ($(shell echo $(docker ps -a | wc -l)-1 | bc -l) && $(shell docker network ls | grep intra | wc -l), 1)
 	@docker-compose -f $(COMPOSE_FILE) down
 	@echo "$(YELLOW)Containers and networks successfully removed$(RESET)"
+else
+	@echo "$(YELLOW)There is no container to remove$(RESET)"
+	@echo "$(YELLOW)There is no network to remove$(RESET)"
+endif
 
 ifneq ($(shell docker images | wc -l), 1)
 	@docker image rm -f `docker images -qa`

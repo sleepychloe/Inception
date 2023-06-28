@@ -77,17 +77,24 @@ fclean:
 	@docker-compose -f $(COMPOSE_FILE) stop
 	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
 
-ifneq ($(shell echo $(shell echo $(shell docker ps -a | wc -l)-1 | bc -l)\
-	+$(shell docker network ls | grep intra | wc -l)\
-	+$(shell echo $(shell docker volume ls | wc -l)-1 | bc -l) | bc -l), 0)
-	@docker-compose -f $(COMPOSE_FILE) down -v
-	@docker system prune -f
+ifneq ($(shell docker container ls -a | wc -l), 1)
+	@docker container prune -f
 	@echo "$(YELLOW)Containers successfully removed$(RESET)"
-	@echo "$(YELLOW)Networks successfully removed$(RESET)"
-	@echo "$(YELLOW)Volumes successfully removed$(RESET)"
 else
 	@echo "$(YELLOW)There is no container to remove$(RESET)"
+endif
+
+ifneq ($(shell docker network ls | grep intra | wc -l), 0)
+	@docker network prune -f
+	@echo "$(YELLOW)Networks successfully removed$(RESET)"
+else
 	@echo "$(YELLOW)There is no network to remove$(RESET)"
+endif
+
+ifneq ($(shell docker volume ls | wc -l), 1)
+	@docker volume rm $(shell docker volume ls | awk 'NR>1' | cut -c 21-40) -f
+	@echo "$(YELLOW)Volumes successfully removed$(RESET)"
+else
 	@echo "$(YELLOW)There is no volume to remove$(RESET)"
 endif
 
@@ -108,4 +115,4 @@ endif
 
 	@echo "$(BLUE)Everything is successfully removed!$(RESET)"
 
-.PHONY: all up list stop fclean
+.PHONY: all up list logs stop fclean

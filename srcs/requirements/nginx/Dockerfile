@@ -8,4 +8,3 @@ RUN apt-get install -y dumb-init && \
 
 #handling dumb-init
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-

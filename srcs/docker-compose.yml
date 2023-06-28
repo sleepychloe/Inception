@@ -28,20 +28,19 @@ services:
       - intra
     tty: true
 
-  # nginx:
-  #   container_name: nginx
-  #   #build: ./requirements/nginx
-  #   image: nginx
-  #   restart: always
-  #   ports:
-  #     - "443:443"
-  #   depends_on:
-  #     - wordpress
-  #   volumes:
-  #     - wordpress_data:/var/www/html/wordpress
-  #   networks:
-  #     - intra
-  #   tty: true
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    restart: always
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    networks:
+      - intra
+    tty: true
 
 networks:
   intra:

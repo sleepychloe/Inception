@@ -50,6 +50,10 @@ else
 	-$(shell echo $(NETWORK_NUM)-1 | bc -l) | bc -l))
 endif
 
+logs:
+	@echo "$(BLUE)OUTPUTS OF CONTAINERS:$(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) logs
+
 stop:
 ifneq ($(shell docker ps -a | wc -l), 1)
 	@echo "$(BLUE)Stopping container..$(RESET)"
@@ -77,6 +81,7 @@ ifneq ($(shell echo $(shell echo $(shell docker ps -a | wc -l)-1 | bc -l)\
 	+$(shell docker network ls | grep intra | wc -l)\
 	+$(shell echo $(shell docker volume ls | wc -l)-1 | bc -l) | bc -l), 0)
 	@docker-compose -f $(COMPOSE_FILE) down -v
+	@docker system prune -f
 	@echo "$(YELLOW)Containers successfully removed$(RESET)"
 	@echo "$(YELLOW)Networks successfully removed$(RESET)"
 	@echo "$(YELLOW)Volumes successfully removed$(RESET)"

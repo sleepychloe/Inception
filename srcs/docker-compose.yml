@@ -5,7 +5,7 @@ services:
     container_name: mariadb
     build: ./requirements/mariadb
     env_file: .env
-    restart: always
+    # restart: always
     expose:
       - "3306"
     volumes:
@@ -17,13 +17,14 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
-    restart: always
+    env_file: .env
+    # restart: always
     depends_on:
       - mariadb
     expose:
       - "9000"
     volumes:
-      - wordpress_data:/var/www/html/wordpress
+      - wordpress_data:/var/www/wordpress
     networks:
       - intra
     tty: true
@@ -31,13 +32,16 @@ services:
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    restart: always
+    env_file: .env
+    # restart: always
+    expose:
+      - "9000"
     ports:
       - "443:443"
     depends_on:
       - wordpress
     volumes:
-      - wordpress_data:/var/www/html/wordpress
+      - wordpress_data:/var/www/wordpress
     networks:
       - intra
     tty: true

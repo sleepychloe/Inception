@@ -6,7 +6,10 @@ RUN apt-get -y update && \
 RUN apt-get install -y dumb-init && \
 	chmod +x /usr/bin/dumb-init
 
-RUN apt-get -y install mariadb-server
+RUN apt-get -y install mariadb-server && \
+	apt-get -y install procps && \
+	mkdir -p /run/mysqld /var/lib/mysql && \
+	chown -R mysql:mysql /var/lib/mysql /run/mysqld
 
 COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
 COPY ./tools/my.cnf /etc/mysql/my.cnf

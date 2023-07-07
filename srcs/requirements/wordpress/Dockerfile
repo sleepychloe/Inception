@@ -32,7 +32,7 @@ RUN mkdir -p /var/www/wordpress
 WORKDIR /var/www/wordpress
 RUN wp core download --allow-root
 
-COPY ./tools/www.conf /etc/php7.3/php-fpm.d/www.conf
+COPY ./tools/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY ./tools/wp-config.php /var/www/wordpress/wp-config.php
 COPY ./tools/script.sh /script.sh
 

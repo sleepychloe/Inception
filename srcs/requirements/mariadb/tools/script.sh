@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ ! -f "/.mysql" ]
+if [ ! -f "/.mysql" ]; then
 
-then
+/usr/bin/mysqld_safe --datadir=/var/lib/mysql &
 
 touch .mysql
 
@@ -13,12 +13,13 @@ echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* to '$MYSQL_USER'@'%';" >> .mysql
 echo "ALTER USER '$MYSQL_ADMIN_USER'@'localhost' IDENTIFIED BY '$MYSQL_ADMIN_PW' ;" >> .mysql
 echo "FLUSH PRIVILEGES ;" >> .mysql
 
-service mysql start && \
-mysql_install_db --basedir=usr --datadir=/var/lib/mysql --user=mysql --rpm && \
-mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW $MYSQL_DB_NAME < .mysql && \
-chown -R mysql:mysql /var/lib/mysql && \
-kill $(cat /var/run/mysqld/mysqld.pid) && \
+#service mysql start -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW && \
+#mysql_install_db --basedir=usr --datadir=/var/lib/mysql --user=mysql --rpm && \
+#mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW $MYSQL_DB_NAME < .mysql
+
+pkill mariadb
 
 fi
 
-mysqld
+#mysqld
+/usr/bin/mysqld_safe --datadir=/var/lib/mysql

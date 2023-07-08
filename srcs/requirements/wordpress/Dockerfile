@@ -21,8 +21,7 @@ RUN apt-get -y install \
 	php7.3-gd \
 	php7.3-xml \
 	php7.3-cli \
-	php7.3-zip \
-	php7.3-soap \
+	php7.3-zip \?log?	php7.3-soap \
 	php7.3-imap
 
 RUN curl -s -L https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar --output /usr/bin/wp && \

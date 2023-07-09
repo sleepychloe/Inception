@@ -1,25 +1,24 @@
 #!/bin/bash
 
-if [ ! -f "/.mysql" ]; then
+if [ ! -f "/.mysql.sql" ]; then
 
 /usr/bin/mysqld_safe --datadir=/var/lib/mysql &
 
-touch .mysql
+touch .mysql.sql
 
-# echo "SET PASSWORD FOR '$MYSQL_ADMIN_USER'@'localhost' = PASSWORD('$MYSQL_ADMIN_PW') ;" >> .mysql
-echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DB_NAME ;" >> .mysql
-echo "CREATE USER IF NOT EXISTS'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' ;" >> .mysql
-echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* to '$MYSQL_USER'@'%';" >> .mysql
-echo "ALTER USER '$MYSQL_ADMIN_USER'@'localhost' IDENTIFIED BY '$MYSQL_ADMIN_PW' ;" >> .mysql
-echo "FLUSH PRIVILEGES ;" >> .mysql
+echo "DELETE FROM mysql.user WHERE User='$MYSQL_ADMIN_USER' AND Host NOT IN ('localhost', '127.0.0.1', '::1') ;" >> .mysql.sql
+echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DB_NAME ;" >> .mysql.sql
+echo "ALTER USER '$MYSQL_ADMIN_USER'@'localhost' IDENTIFIED BY '$MYSQL_ADMIN_PW' ;" >> .mysql.sql
+echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' ;" >> .mysql.sql
+echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;" >> .mysql.sql
+echo "FLUSH PRIVILEGES ;" >> .mysql.sql
 
-#service mysql start -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW && \
-#mysql_install_db --basedir=usr --datadir=/var/lib/mysql --user=mysql --rpm && \
-#mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW $MYSQL_DB_NAME < .mysql
-
-pkill mariadb
+pkill mysqld
 
 fi
 
-#mysqld
+mysqld < .mysql.sql
+# service mysql start -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW && \
+# mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW $MYSQL_DB_NAME < .mysql.sql
+
 /usr/bin/mysqld_safe --datadir=/var/lib/mysql

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -f "/var/www/wordpress/.wordpress" ]; then
+#if [ ! -f "/var/www/wordpress/.wordpress" ]; then
 
 cd /var/www/wordpress
 
@@ -17,9 +17,10 @@ wp user create $WORDPRESS_USER $WORDPRESS_USER_EMAIL --role=author --user_pass=$
 wp redis enable --path=/var/www/wordpress --allow-root
 
 touch .wordpress
+service php7.3-fpm start
 # service php7.3-fpm start
 
-fi
+#fi
 
 /usr/sbin/php-fpm7.3 --nodaemonize
 #service php7.3-fpm start

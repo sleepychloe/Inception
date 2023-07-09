@@ -11,9 +11,9 @@ RUN apt-get -y install mariadb-server && \
 	mkdir -p /run/mysqld /var/lib/mysql && \
 	chown -R mysql:mysql /var/lib/mysql /run/mysqld
 
-COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/my.cnf /etc/mysql/my.cnf
-COPY ./tools/script.sh /
+COPY ./tools/script.sh /script.sh
 
 RUN chmod +x /script.sh
 

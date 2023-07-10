@@ -14,37 +14,37 @@ services:
       - intra
     tty: true
 
-  # wordpress:
-  #   container_name: wordpress
-  #   build: ./requirements/wordpress
-  #   env_file: .env
-  #   # restart: always
-  #   depends_on:
-  #     - mariadb
-  #   expose:
-  #     - "9000"
-  #   volumes:
-  #     - wordpress_data:/var/www/wordpress
-  #   networks:
-  #     - intra
-  #   tty: true
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    env_file: .env
+    # restart: always
+    depends_on:
+      - mariadb
+    expose:
+      - "9000"
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - intra
+    tty: true
 
-  # nginx:
-  #   container_name: nginx
-  #   build: ./requirements/nginx
-  #   env_file: .env
-  #   # restart: always
-  #   expose:
-  #     - "9000"
-  #   ports:
-  #     - "443:443"
-  #   depends_on:
-  #     - wordpress
-  #   volumes:
-  #     - wordpress_data:/var/www/wordpress
-  #   networks:
-  #     - intra
-  #   tty: true
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    env_file: .env
+    # restart: always
+    expose:
+      - "9000"
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - intra
+    tty: true
 
 networks:
   intra:
@@ -60,10 +60,10 @@ volumes:
       device: /home/yhwang/data/mysql
       o: bind
 
-  # wordpress_data:
-  #   name: wordpress_data
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /home/yhwang/data/wordpress
-  #     o: bind
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/yhwang/data/wordpress
+      o: bind

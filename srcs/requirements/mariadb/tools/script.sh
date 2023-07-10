@@ -1,24 +1,27 @@
 #!/bin/bash
 
-if [ ! -f "/.mysql.sql" ]; then
+# if [ ! -f "/setup.sql" ]; then
 
 /usr/bin/mysqld_safe --datadir=/var/lib/mysql &
 
-touch .mysql.sql
+touch setup.sql
 
-echo "DELETE FROM mysql.user WHERE User='$MYSQL_ADMIN_USER' AND Host NOT IN ('localhost', '127.0.0.1', '::1') ;" >> .mysql.sql
-echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DB_NAME ;" >> .mysql.sql
-echo "ALTER USER '$MYSQL_ADMIN_USER'@'localhost' IDENTIFIED BY '$MYSQL_ADMIN_PW' ;" >> .mysql.sql
-echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' ;" >> .mysql.sql
-echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;" >> .mysql.sql
-echo "FLUSH PRIVILEGES ;" >> .mysql.sql
+echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DB_NAME ;" >> setup.sql
+echo "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' ;" >> setup.sql
+echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' WITH GRANT OPTION ;" >> setup.sql
+echo "FLUSH PRIVILEGES ;" >> setup.sql
+echo "ALTER USER '$MYSQL_ADMIN_USER'@'localhost' IDENTIFIED BY '$MYSQL_ADMIN_PW' ;" >> setup.sql
 
-pkill mysqld
+#pkill mysqld
+# fi
 
-fi
 
-mysqld < .mysql.sql
-# service mysql start -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW && \
-# mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW $MYSQL_DB_NAME < .mysql.sql
+service mysql start
 
+# myslqd < setup.sql
+mysql -u$MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW < setup.sql
+
+mysqld
+# /usr/bin/mysqld_safe --datadir=/var/lib/mysql < setup.sql
 /usr/bin/mysqld_safe --datadir=/var/lib/mysql
+# mysqld

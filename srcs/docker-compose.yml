@@ -5,7 +5,7 @@ services:
     container_name: mariadb
     build: ./requirements/mariadb
     env_file: .env
-    # restart: always
+    restart: always
     expose:
       - "3306"
     volumes:
@@ -22,6 +22,7 @@ services:
     depends_on:
       - mariadb
     expose:
+      - "3306"
       - "9000"
     volumes:
       - wordpress_data:/var/www/wordpress

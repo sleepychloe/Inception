@@ -8,6 +8,7 @@ RUN apt-get install -y dumb-init && \
 
 RUN apt-get -y install \
 	mariadb-client \
+	mysql-common \
 	curl \
 	php7.3 \
 	php7.3-fpm \
@@ -36,15 +37,16 @@ COPY ./tools/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY ./tools/wp-config.php /var/www/wordpress/wp-config.php
 COPY ./tools/script.sh /script.sh
 
+RUN mkdir -p /run/php && \
+	chown -R www-data:www-data /run/php && \
+	chmod 755 /run/php
+
 RUN chmod +x /script.sh
 
 EXPOSE 9000/tcp
 EXPOSE 3306/tcp
 
-# ENTRYPOINT ["/script.sh"]
-
 # handling dumb-init
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-#CMD ["/usr/bin/php-fpm7.3", "-F"]
 CMD ["/script.sh"]

@@ -18,7 +18,7 @@ RUN chmod +x /script.sh
 
 EXPOSE 3306/tcp
 
-#handling dumb-init
+# handling dumb-init
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 CMD ["/script.sh"]

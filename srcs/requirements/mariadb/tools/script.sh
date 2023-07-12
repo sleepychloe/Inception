@@ -1,6 +1,9 @@
 #!/bin/bash
 
-/usr/bin/mysqld_safe --datadir=/var/lib/mysql --skip-networking --nowatch
+service mysql start
+
+sed -i "s/MYSQL_ADMIN_PW/$MYSQL_ADMIN_PW/g" /etc/mysql/my.cnf
+sed -i "s/MARIADB_HOST/$MARIADB_HOST/g" /etc/mysql/my.cnf
 
 counter=0
 while ! mysqladmin ping --silent && [[ $counter -lt 30 ]]; do
@@ -33,15 +36,9 @@ echo "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' ;" >
 echo "GRANT ALL PRIVILEGES ON $MYSQL_DB_NAME.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PW' WITH GRANT OPTION ;" >> setup.sql
 echo "FLUSH PRIVILEGES ;" >> setup.sql
 
-# mysql -u $MYSQL_ADMIN_USER -p$MYSQL_ADMIN_PW < setup.sql
 mysql < setup.sql
 
 fi
-
-# while ! mysqladmin ping --silent; do
-# 	sleep 1
-# done
-# fi
 
 mysqld
 

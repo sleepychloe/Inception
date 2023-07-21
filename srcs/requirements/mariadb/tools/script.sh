@@ -39,7 +39,3 @@ echo "FLUSH PRIVILEGES ;" >> setup.sql
 mysql < setup.sql
 
 fi
-
-mysqld
-
-/usr/bin/mysqld_safe --datadir=/var/lib/mysql

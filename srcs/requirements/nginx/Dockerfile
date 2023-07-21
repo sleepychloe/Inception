@@ -3,8 +3,8 @@ FROM debian:buster
 RUN apt-get -y update && \
 	apt-get -y upgrade
 
-RUN apt-get install -y dumb-init && \
-	chmod +x /usr/bin/dumb-init
+# RUN apt-get install -y dumb-init && \
+	# chmod +x /usr/bin/dumb-init
 
 RUN apt-get install -y nginx
 
@@ -15,13 +15,11 @@ RUN apt-get install -y openssl && \
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
 COPY ./tools/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./tools/script.sh /
-
-RUN chmod +x /script.sh
 
 EXPOSE 443
 
-#handling dumb-init
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+# handling dumb-init
+# ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD ["sh", "-c", "/script.sh"]
+# run nginx in foreground
+CMD ["nginx", "-g", "daemon off;"]

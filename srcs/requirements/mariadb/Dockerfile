@@ -5,6 +5,8 @@ RUN apt-get -y update && \
 
 # RUN apt-get install -y dumb-init && \
 # 	chmod +x /usr/bin/dumb-init
+# RUN apt-get install -y dumb-init && \
+	# chmod +x /usr/bin/dumb-init
 
 RUN apt-get -y install mariadb-server && \
 	apt-get -y install procps && \
@@ -16,9 +18,11 @@ COPY ./tools/script.sh /script.sh
 
 RUN chmod +x /script.sh
 
+CMD ["/script.sh"]
+
 EXPOSE 3306/tcp
 
 # handling dumb-init
 # ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD ["/script.sh"]
+CMD ["mysqld"]

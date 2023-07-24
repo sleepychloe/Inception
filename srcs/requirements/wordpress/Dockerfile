@@ -4,7 +4,7 @@ RUN apt-get -y update && \
 	apt-get -y upgrade
 
 # RUN apt-get install -y dumb-init && \
-# 	chmod +x /usr/bin/dumb-init
+	# chmod +x /usr/bin/dumb-init
 
 RUN apt-get -y install \
 	mariadb-client \

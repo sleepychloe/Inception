@@ -15,12 +15,11 @@ RUN apt-get install -y openssl && \
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
 COPY ./tools/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./tools/script.sh /
-
-RUN chmod +x /script.sh
 
 EXPOSE 443
 
+# handling dumb-init
+# ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 # handling dumb-init
 # ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 

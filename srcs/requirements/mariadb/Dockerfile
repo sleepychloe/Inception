@@ -5,8 +5,6 @@ RUN apt-get -y update && \
 
 # RUN apt-get install -y dumb-init && \
 # 	chmod +x /usr/bin/dumb-init
-# RUN apt-get install -y dumb-init && \
-	# chmod +x /usr/bin/dumb-init
 
 RUN apt-get -y install mariadb-server && \
 	apt-get -y install procps && \

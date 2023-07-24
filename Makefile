@@ -14,9 +14,6 @@ ifneq ($(findstring yhwang.42.fr, $(shell cat /etc/hosts)), yhwang.42.fr)
 	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr is added to the /etc/hosts$(RESET)"
 else
 	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr already exists in the /etc/hosts$(RESET)"
-	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr is added to the /etc/hosts$(RESET)"
-else
-	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr already exists in the /etc/hosts$(RESET)"
 endif
 
 	@echo "$(BLUE)Creating and starting containers..$(RESET)"
@@ -127,12 +124,6 @@ ifeq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
 	@echo "$(YELLOW)/home/yhwang/data/wordpress directory is removed$(RESET)"
 endif
 
-
-
-ifeq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
-	@sudo rm -rf /home/yhwang/data/wordpress
-	@echo "$(YELLOW)/home/yhwang/data/wordpress directory is removed$(RESET)"
-endif
 	@echo "$(BLUE)Everything is successfully removed!$(RESET)"
 
 .PHONY: all up list logs stop fclean

@@ -2,9 +2,6 @@
 
 service mysql start
 
-# sed -i "s/MYSQL_ADMIN_PW/$MYSQL_ADMIN_PW/g" /etc/mysql/my.cnf
-# sed -i "s/MARIADB_HOST/$MARIADB_HOST/g" /etc/mysql/my.cnf
-
 counter=0
 while ! mysqladmin ping --silent && [[ $counter -lt 30 ]]; do
 	sleep 1

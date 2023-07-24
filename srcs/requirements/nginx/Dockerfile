@@ -20,7 +20,5 @@ EXPOSE 443
 
 # handling dumb-init
 # ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-# handling dumb-init
-# ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 CMD ["/script.sh"]

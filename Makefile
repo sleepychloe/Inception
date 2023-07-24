@@ -11,16 +11,25 @@ all: up
 up:
 ifneq ($(findstring yhwang.42.fr, $(shell cat /etc/hosts)), yhwang.42.fr)
 	@echo "127.0.0.1	yhwang.42.fr" | sudo tee -a /etc/hosts
+	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr is added to the /etc/hosts$(RESET)"
+else
+	@echo "$(YELLOW)127.0.0.1 yhwang.42.fr already exists in the /etc/hosts$(RESET)"
 endif
 
 	@echo "$(BLUE)Creating and starting containers..$(RESET)"
 
-ifneq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
-	@sudo mkdir -p /home/yhwang/data/wordpress
-endif
-
 ifneq ($(shell ls /home/yhwang/data/ | grep mysql | wc -l ), 1)
 	@sudo mkdir -p /home/yhwang/data/mysql
+	@echo "$(YELLOW)/home/yhwang/data/mysql directory is created$(RESET)"
+else
+	@echo "$(YELLOW)/home/yhwang/data/mysql directory already exists$(RESET)"
+endif
+
+ifneq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
+	@sudo mkdir -p /home/yhwang/data/wordpress
+	@echo "$(YELLOW)/home/yhwang/data/wordpress directory is created$(RESET)"
+else
+	@echo "$(YELLOW)/home/yhwang/data/wordpress directory already exists$(RESET)"
 endif
 
 	@docker-compose -f $(COMPOSE_FILE) up --build -d
@@ -105,14 +114,15 @@ else
 	@echo "$(YELLOW)There is no image to remove$(RESET)"
 endif
 
-ifeq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
-	@sudo rm -rf /home/yhwang/data/wordpress
-endif
-
 ifeq ($(shell ls /home/yhwang/data/ | grep mysql | wc -l ), 1)
 	@sudo rm -rf /home/yhwang/data/mysql
+	@echo "$(YELLOW)/home/yhwang/data/mysql directory is removed$(RESET)"
 endif
 
+ifeq ($(shell ls /home/yhwang/data/ | grep wordpress | wc -l ), 1)
+	@sudo rm -rf /home/yhwang/data/wordpress
+	@echo "$(YELLOW)/home/yhwang/data/wordpress directory is removed$(RESET)"
+endif
 	@echo "$(BLUE)Everything is successfully removed!$(RESET)"
 
 .PHONY: all up list logs stop fclean

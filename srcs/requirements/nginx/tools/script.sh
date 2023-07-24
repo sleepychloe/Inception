@@ -2,5 +2,5 @@
 
 sleep 3;
 
-# Run by dumb-init
+# run nginx in foreground
 nginx -g "daemon off;"

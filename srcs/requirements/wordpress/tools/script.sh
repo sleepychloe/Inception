@@ -24,5 +24,5 @@ touch .wordpress
 
 fi
 
-# service php7.3-fpm start
+# service php7.3-fpm start in foreground
 /usr/sbin/php-fpm7.3 --nodaemonize

@@ -66,7 +66,7 @@ logs:
 stop:
 ifneq ($(shell docker ps -a | wc -l), 1)
 	@echo "$(BLUE)Stopping container..$(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) stop
+	@docker-compose -f $(COMPOSE_FILE) stop -t1
 	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
 else
 	@echo "$(YELLOW)There is no container to stop$(RESET)"
@@ -83,7 +83,7 @@ endif
 
 fclean:
 	@echo "$(BLUE)Removing everything..$(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) stop
+	@docker-compose -f $(COMPOSE_FILE) stop -t1
 	@echo "$(YELLOW)Containers succesfully stopped$(RESET)"
 
 ifneq ($(shell docker container ls -a | wc -l), 1)

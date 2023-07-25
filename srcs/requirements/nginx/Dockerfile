@@ -15,6 +15,9 @@ RUN apt-get install -y openssl && \
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
 COPY ./tools/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./tools/script.sh /script.sh
+
+RUN chmod +x /script.sh
 
 EXPOSE 443
 

@@ -16,11 +16,9 @@ COPY ./tools/script.sh /script.sh
 
 RUN chmod +x /script.sh
 
-CMD ["/script.sh"]
-
 EXPOSE 3306/tcp
 
 # handling dumb-init
 # ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD ["mysqld"]
+CMD ["/script.sh"]

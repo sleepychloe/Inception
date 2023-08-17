@@ -1,4 +1,7 @@
 # Inception
+Mandatory part
+
+Success 100/100
 
 ## Installation
 
